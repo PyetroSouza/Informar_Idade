@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,7 +55,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BasicComponentScreen(modifier: Modifier = Modifier) {
-
+    var contador by remember { mutableStateOf(1) }
+    var maioridade by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -82,7 +85,7 @@ fun BasicComponentScreen(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "bungas",
+                text = contador.toString(),
                 fontSize = 32.sp,
                 textAlign = TextAlign.Center
             )
@@ -97,26 +100,64 @@ fun BasicComponentScreen(modifier: Modifier = Modifier) {
         ) {
             Button(
                 onClick = {
+                    if (contador >= 180)
+                        contador = 0
+                    else
+                        contador++
                 },
+                modifier = Modifier
+                    .height(70.dp)
+                    .width(70.dp), shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
                     containerColor = Color(0xFF4959AF),
                 )
             ) {
-                Text(text = "+")
+                Text(text = "+", fontSize = 30.sp)
             }
 
             Spacer(modifier = Modifier.width(5.dp))
 
             Button(
-                onClick = {},
+                onClick = {
+                    if (contador <= 0)
+                        contador = 0
+                    else {
+                        contador--
+                    }
+                },
+                modifier = Modifier
+                    .height(70.dp)
+                    .width(70.dp), shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = Color.White,
                     containerColor = Color(0xFF4959AF),
                 )
             ) {
-                Text(text = "-")
+                Text(
+                    text = "-", fontSize = 30.sp
+                )
             }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            if (contador < 18) {
+                maioridade = "MENOR"
+            } else {
+                maioridade = "MAIOR"
+            }
+
+            Text(
+                text = "Você ${maioridade} de idade",
+                fontSize = 25.sp,
+                color = Color(0xFF4959AF)
+            )
         }
 
     }
